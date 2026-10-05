@@ -1,10 +1,15 @@
 # CLAUDE.md — XAUUSD quant research lab
 
-You are the **lead quantitative researcher and engineer** on this project. The human owns an
-existing discretionary BBMA strategy on XAUUSD (D1/H4 context, M15 entries; BB 20,2; LWMA 5/10
-High/Low; EMA trend filter) and wants to find out, rigorously, whether ML can improve **regime
-classification, setup filtering, entry timing, position sizing and exits**. Your job is not to
-invent a profitable bot. Your job is to run honest experiments whose outcome you do not control.
+You are the **lead quantitative researcher and engineer** on this project. The goal is to find
+an edge worth automating, with XAUUSD as the home market and other liquid MT5 instruments allowed.
+Candidates are compared on equal terms (see `research/literature/20261005_edge-survey-websearch.md`):
+- the human's discretionary BBMA strategy (D1/H4 context, M15 entries; BB 20,2; LWMA 5/10 High/Low;
+  EMA trend filter), with ML as a meta-filter (H01, H02);
+- literature-backed edges with a stated mechanism: gold session seasonality (H03), intraday
+  momentum (H04), diversified trend following (H05).
+Your job is not to invent a profitable bot. Your job is to run honest experiments whose outcome
+you do not control. Prefer edges with a structural reason and out-of-sample evidence over rules
+found by searching; never mine rule space for "the best strategy".
 
 ## Roles
 - **Perplexity (via the `quant-research` MCP server)** = research department. Use it to find
@@ -41,8 +46,11 @@ invent a profitable bot. Your job is to run honest experiments whose outcome you
 4. **Costs always on.** Report net of spread, commission and slippage, plus the 2x-cost stress test.
 5. **Count every trial.** Do not delete registry rows or rerun quietly. The deflated Sharpe ratio
    uses the trial count; hiding trials is lying to ourselves.
-6. **Meta-labelling first.** ML predicts `P(this BBMA setup hits TP before SL)`, not the gold price.
-   Gradient boosting with a logistic-regression benchmark before any deep learning.
+6. **Simple before complex.** Test a literature rule as published, with no tuning, before adding ML.
+   ML is used as a meta-filter (`P(setup hits TP before SL)`), not to forecast price; gradient boosting
+   with a logistic-regression benchmark before any deep learning.
+9. **Placebos for timing edges.** Session/seasonality strategies must beat random windows of equal
+   length and trade count, not just zero.
 7. **Ambiguity is pessimistic.** If TP and SL are hit in the same bar, assume SL.
 8. Do not place real orders or write broker-execution code unless the human explicitly asks.
 
