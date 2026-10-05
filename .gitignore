@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.pytest_cache/
+*.egg-info/
+
+# Market data never goes in git
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Experiment outputs (the registry DB is local; summaries go in reports/)
+experiments/*.db
+experiments/runs/
+mlruns/

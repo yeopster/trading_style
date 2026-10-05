@@ -1,0 +1,49 @@
+# Single source of truth for the research protocol. Changing anything under
+# `splits` after the lockbox has been opened invalidates every result.
+
+symbol: XAUUSD
+data:
+  m15_csv: data/raw/XAUUSD_M15.csv     # MT5 export: time,open,high,low,close,tick_volume,spread
+  timezone: UTC
+
+splits:
+  # Development data: all research, feature selection, tuning, thresholds.
+  dev_end: "2022-12-31 23:59"
+  # Lockbox (untouched OOS): opened ONCE per hypothesis that passes all dev gates.
+  lockbox_start: "2023-01-01 00:00"
+
+costs:                      # per-trade, in USD per ounce (price units)
+  spread: 0.25              # fallback if bar spread column missing
+  commission: 0.07          # round turn
+  slippage: 0.10            # per side, adverse
+
+strategy:
+  bb_period: 20
+  bb_std: 2.0
+  lwma_fast: 5
+  lwma_slow: 10
+  ema_trend: 50
+  htf_ema: 50
+
+labels:
+  tp_atr: 2.0
+  sl_atr: 1.0
+  max_bars: 48              # 12 hours of M15
+  atr_period: 14
+
+validation:
+  n_splits: 6
+  embargo_bars: 96
+  min_train_trades: 150
+
+meta_model:
+  threshold: 0.55
+  params:
+    n_estimators: 300
+    learning_rate: 0.03
+    num_leaves: 15
+    min_child_samples: 40
+    subsample: 0.8
+    subsample_freq: 1
+    colsample_bytree: 0.8
+    reg_lambda: 1.0
